@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace DemoApplication
+﻿namespace DemoApplication
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// The main application entry point
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
     }
 }
