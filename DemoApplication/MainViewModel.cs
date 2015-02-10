@@ -9,22 +9,26 @@
 
 namespace DemoApplication
 {
+    using System;
     using System.ComponentModel;
     using System.Reactive.Subjects;
     using System.Runtime.CompilerServices;
 
     using ReactiveXAML.Annotations;
 
+    using Console = System.Console;
+
     public class MainViewModel : INotifyPropertyChanged
     {
         public MainViewModel()
         {
-            TestSubject = new Subject<string>();
+            TestSubject = new Subject<object>();
+            TestSubject.Subscribe(x => Console.WriteLine(@"Value changed to {0}", new[] { x }));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Subject<string> TestSubject { get; private set; }
+        public Subject<object> TestSubject { get; private set; }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ObservableBinding.cs" company="Zühlke Engineering GmbH">
+// <copyright file="ObservableBindingProxy.cs" company="Zühlke Engineering GmbH">
 //   Zühlke Engineering GmbH
 // </copyright>
 // <summary>
@@ -20,17 +20,17 @@ namespace ReactiveXAML
     /// <summary>
     /// Used to connect a controls property to an observable/observer
     /// </summary>
-    public class ObservableBinding : DependencyObject, INotifyPropertyChanged
+    public class ObservableBindingProxy : DependencyObject, INotifyPropertyChanged
     {
-        public static readonly DependencyProperty SetterProperty = DependencyProperty.Register("Setter", typeof(IObservable<object>), typeof(ObservableBinding), new PropertyMetadata(default(IObservable<object>), SetterChanged));
+        public static readonly DependencyProperty SetterProperty = DependencyProperty.Register("Setter", typeof(IObservable<object>), typeof(ObservableBindingProxy), new PropertyMetadata(default(IObservable<object>), SetterChanged));
 
-        public static readonly DependencyProperty GetterProperty = DependencyProperty.Register("Getter", typeof(IObserver<object>), typeof(ObservableBinding), new PropertyMetadata(default(IObserver<object>)));
+        public static readonly DependencyProperty GetterProperty = DependencyProperty.Register("Getter", typeof(IObserver<object>), typeof(ObservableBindingProxy), new PropertyMetadata(default(IObserver<object>)));
 
         private object value;
 
         private IDisposable setterSubscription;
 
-        public ObservableBinding()
+        public ObservableBindingProxy()
         {
             this.Setter = new Subject<object>();
         }
@@ -100,7 +100,7 @@ namespace ReactiveXAML
 
         private static void SetterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var item = d as ObservableBinding;
+            var item = d as ObservableBindingProxy;
             if (item == null)
             {
                 return;
@@ -115,7 +115,12 @@ namespace ReactiveXAML
             var newValue = e.NewValue as IObservable<object>;
             if (newValue != null)
             {
-                newValue.Subscribe(x => item.Value = x);
+                newValue.Subscribe(
+                    x =>
+                        {
+                            item.value = x;
+                            item.OnPropertyChanged("Value");
+                        });
             }
         }
     }

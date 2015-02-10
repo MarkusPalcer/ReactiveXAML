@@ -5,26 +5,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:self="clr-namespace:DemoApplication"
-        xmlns:markupExtensions="clr-namespace:ReactiveXAML.MarkupExtensions;assembly=ReactiveXAML"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" d:DataContext="{d:DesignInstance self:MainViewModel}">
     <Window.Resources>
+        <Style TargetType="{x:Type TextBox}">
+            <Style.Setters>
+                <Setter Property="Width"
+                        Value="200" />
+            </Style.Setters>
+        </Style>
 
+        <FrameworkElement x:Key="DataContextBridge" />
     </Window.Resources>
+    <Window.DataContext>
+        <Binding Mode="OneWayToSource" Path="DataContext" Source="{StaticResource DataContextBridge}" />
+    </Window.DataContext>
     <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Horizontal">
-            <StackPanel.Resources>
-                <rxaml:ObservableBinding x:Key="SampleBinding"
-                                         Getter="{Binding TestSubject}"
-                                         Setter="{Binding TestSubject}" />
-            </StackPanel.Resources>
-            <TextBox Text="{Binding Source={StaticResource SampleBinding}, Path=Value}">
-            </TextBox>
-            <TextBox Text="{Binding Source={StaticResource SampleBinding}, Path=Value}"></TextBox>
-        </StackPanel>
+        <StackPanel.Resources>
+            <!-- Aim is to hide these in a markup extension, so we can write something like {ObservableBinding SetterPath=TestSubject, GetterPath=TestSubject} in the Text property directly -->
+            <rxaml:ObservableBindingProxy x:Key="SampleBinding"
+                                          Getter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}"
+                                          Setter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
+            <rxaml:ObservableBindingProxy x:Key="SampleBinding2"
+                                          Getter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}"
+                                          Setter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
 
+        </StackPanel.Resources>
         <StackPanel Orientation="Horizontal">
-            <TextBox Text="{markupExtensions:ObservableBinding GetterBinding={Binding TestSubject}, SetterBinding={Binding TestSubject}}" />
+            <Label>With Proxy:</Label>
+            <TextBox Text="{Binding Source={StaticResource SampleBinding}, Path=Value}" />
+            <Label>&lt;-&gt;</Label>
+            <TextBox Text="{Binding Source={StaticResource SampleBinding2}, Path=Value}" />
+        </StackPanel> 
+        <StackPanel Orientation="Horizontal">
+            <Label>With Command:</Label>
+            <TextBox x:Name="CommandText" Text="{Binding Source={StaticResource SampleBinding}, Path=Value, Mode=OneWay }"/>
+            <Button Content="Set" CommandParameter="{Binding ElementName=CommandText, Path=Text}">
+                <Button.Command>
+                    <!-- Aim is to hide this in a markup extension, so we can write {ReactiveCommand TestSubject} in the Command property -->
+                    <rxaml:ReactiveCommand CalledObserver="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
+                </Button.Command>
+            </Button>
         </StackPanel>
     </StackPanel>
 </Window>

@@ -16,8 +16,8 @@ namespace DemoApplication
     {
         public MainWindow()
         {
-            this.DataContext = new MainViewModel();
             InitializeComponent();
+            this.DataContext = new MainViewModel();
         }
     }
 }
