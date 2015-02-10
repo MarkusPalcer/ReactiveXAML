@@ -39,7 +39,7 @@
             var binding = new Binding(path) { Source = source };
 
             var command = new ReactiveCommand();
-            command.SetBinding(ReactiveCommand.CalledObserverProperty, binding);
+            BindingOperations.SetBinding(command, ReactiveCommand.CalledObserverProperty, binding);
 
             return command;
         }

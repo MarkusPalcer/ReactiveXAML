@@ -57,6 +57,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MarkupExtensions\ObservableBindingExtension.cs" />
     <Compile Include="MarkupExtensions\ReactiveCommandExtension.cs" />
     <Compile Include="ReactiveCommand.cs" />
     <Compile Include="ObservableBindingProxy.cs" />

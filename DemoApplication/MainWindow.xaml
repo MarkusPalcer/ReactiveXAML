@@ -23,7 +23,6 @@
     </Window.DataContext>
     <StackPanel Orientation="Vertical">
         <StackPanel.Resources>
-            <!-- Aim is to hide these in a markup extension, so we can write something like {ObservableBinding SetterPath=TestSubject, GetterPath=TestSubject} in the Text property directly -->
             <rxaml:ObservableBindingProxy x:Key="SampleBinding"
                                           Getter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}"
                                           Setter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
@@ -38,16 +37,37 @@
             <TextBox Text="{Binding Source={StaticResource SampleBinding}, Path=Value}" />
             <Label>&lt;-&gt;</Label>
             <TextBox Text="{Binding Source={StaticResource SampleBinding2}, Path=Value}" />
-        </StackPanel> 
-        
-        <!-- TODO: Create sample for ObservableBinding with MarkupExtension -->
+        </StackPanel>
         
         <StackPanel Orientation="Horizontal">
+            <Label>With Proxy via MarkupExtension:</Label>
+            <TextBox Text="{markupExtensions:ObservableBinding TestSubject}" />
+            <Label>&lt;-&gt;</Label>
+            <TextBox Text="{markupExtensions:ObservableBinding TestSubject}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <Label>With Proxy via MarkupExtension, using binding modes:</Label>
+            <Label>-x-&gt;</Label>
+            <TextBox Text="{markupExtensions:ObservableBinding TestSubject, Mode=OneWayToSource}" />
+            <Label>-&gt;</Label>
+            <TextBox Text="{markupExtensions:ObservableBinding TestSubject, Mode=OneWay}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <Label>With Proxy via MarkupExtension, using transformation:</Label>
+            <Label>-x-&gt;</Label>
+            <TextBox Text="{markupExtensions:ObservableBinding TransformingSubject, Mode=OneWayToSource}" />
+            <Label>-&gt;</Label>
+            <TextBox Text="{markupExtensions:ObservableBinding TransformationResult, Mode=OneWay}" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
             <Label>With Command:</Label>
-            <TextBox x:Name="SampleText1" Text="{Binding Source={StaticResource SampleBinding}, Path=Value, Mode=OneWay }"/>
+            <TextBox x:Name="SampleText1"
+                     Text="{markupExtensions:ObservableBinding TestSubject, Mode=OneWay}"/>
             <Button Content="Set" CommandParameter="{Binding ElementName=SampleText1, Path=Text}">
                 <Button.Command>
-                    <!-- Aim is to hide this in a markup extension, so we can write {ReactiveCommand TestSubject} in the Command property -->
                     <rxaml:ReactiveCommand CalledObserver="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
                 </Button.Command>
             </Button>
@@ -56,7 +76,7 @@
         <StackPanel Orientation="Horizontal">
             <Label>With Command from MarkupExtension:</Label>
             <TextBox x:Name="SampleText2"
-                     Text="{Binding Source={StaticResource SampleBinding}, Path=Value, Mode=OneWay }" />
+                     Text="{markupExtensions:ObservableBinding TestSubject, Mode=OneWay}" />
             <Button Content="Set"
                     Command="{markupExtensions:ReactiveCommand TestSubject}"
                     CommandParameter="{Binding ElementName=SampleText2, Path=Text}" />

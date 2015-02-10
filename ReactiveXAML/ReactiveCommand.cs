@@ -5,7 +5,7 @@
     using System.Windows;
     using System.Windows.Input;
 
-    public class ReactiveCommand : FrameworkElement, ICommand
+    public class ReactiveCommand : DependencyObject, ICommand
     {
         public static readonly DependencyProperty CalledObserverProperty = DependencyProperty.Register("CalledObserver", typeof(object), typeof(ReactiveCommand), new PropertyMetadata(null, CalledObserverPropertyChanged));
 
