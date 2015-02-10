@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:self="clr-namespace:DemoApplication"
+        xmlns:markupExtensions="clr-namespace:ReactiveXAML.MarkupExtensions;assembly=ReactiveXAML"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" d:DataContext="{d:DesignInstance self:MainViewModel}">
     <Window.Resources>
@@ -31,21 +32,32 @@
                                           Setter="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
 
         </StackPanel.Resources>
+        
         <StackPanel Orientation="Horizontal">
             <Label>With Proxy:</Label>
             <TextBox Text="{Binding Source={StaticResource SampleBinding}, Path=Value}" />
             <Label>&lt;-&gt;</Label>
             <TextBox Text="{Binding Source={StaticResource SampleBinding2}, Path=Value}" />
         </StackPanel> 
+        
         <StackPanel Orientation="Horizontal">
             <Label>With Command:</Label>
-            <TextBox x:Name="CommandText" Text="{Binding Source={StaticResource SampleBinding}, Path=Value, Mode=OneWay }"/>
-            <Button Content="Set" CommandParameter="{Binding ElementName=CommandText, Path=Text}">
+            <TextBox x:Name="SampleText1" Text="{Binding Source={StaticResource SampleBinding}, Path=Value, Mode=OneWay }"/>
+            <Button Content="Set" CommandParameter="{Binding ElementName=SampleText1, Path=Text}">
                 <Button.Command>
                     <!-- Aim is to hide this in a markup extension, so we can write {ReactiveCommand TestSubject} in the Command property -->
                     <rxaml:ReactiveCommand CalledObserver="{Binding DataContext.TestSubject, Source={StaticResource DataContextBridge}}" />
                 </Button.Command>
             </Button>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal">
+            <Label>With Command from MarkupExtension:</Label>
+            <TextBox x:Name="SampleText2"
+                     Text="{Binding Source={StaticResource SampleBinding}, Path=Value, Mode=OneWay }" />
+            <Button Content="Set"
+                    Command="{markupExtensions:ReactiveCommand TestSubject}"
+                    CommandParameter="{Binding ElementName=SampleText2, Path=Text}" />
         </StackPanel>
     </StackPanel>
 </Window>
