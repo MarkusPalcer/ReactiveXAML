@@ -10,6 +10,7 @@
 namespace DemoApplication
 {
     using System;
+    using System.Collections;
     using System.ComponentModel;
     using System.Reactive.Subjects;
     using System.Runtime.CompilerServices;
