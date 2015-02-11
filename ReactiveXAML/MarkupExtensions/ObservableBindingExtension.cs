@@ -10,6 +10,7 @@
         public ObservableBindingExtension()
         {
             this.Mode = BindingMode.Default;
+            this.UpdateSourceTrigger = UpdateSourceTrigger.Default;
         }
 
         public ObservableBindingExtension(string path) : this()
@@ -23,6 +24,8 @@
         public Binding GetterBinding { get; set; }
 
         public BindingMode Mode { get; set; }
+
+        public UpdateSourceTrigger UpdateSourceTrigger { get; set; }
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
@@ -61,7 +64,8 @@
             var result = new Binding("Value")
                              {
                                  Source = proxy,
-                                 Mode = Mode
+                                 Mode = Mode,
+                                 UpdateSourceTrigger = this.UpdateSourceTrigger
                              };
 
             return result.ProvideValue(serviceProvider);

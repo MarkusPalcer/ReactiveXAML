@@ -11,10 +11,9 @@
 
         public static readonly DependencyProperty CanExecuteProperty = DependencyProperty.Register("CanExecute", typeof(object), typeof(ReactiveCommand), new PropertyMetadata(true, CanExecutePropertyChanged), ValidateCanExecuteProperty);
 
-        private static bool ValidateCanExecuteProperty(object value)
-        {
-            return value == null || value is bool || value is Func<object, bool>;
-        }
+        private bool lastObservedCanExecuteValue;
+
+        private IDisposable canExecuteSubscription;
 
         public event EventHandler CanExecuteChanged;
 
@@ -53,20 +52,19 @@
             }
 
             var directValue = CanExecute as bool?;
-            var callbackValue = CanExecute as Func<object, bool>;
+            var observableValue = CanExecute as IObservable<bool>;
 
             if (directValue.HasValue)
             {
                 return directValue.Value;
             }
-            else if (callbackValue != null)
+            
+            if (observableValue != null)
             {
-                return callbackValue(parameter);
+                return this.lastObservedCanExecuteValue;
             }
-            else
-            {
-                return true;
-            }
+            
+            return true;
         }
 
         public void Execute(object parameter)
@@ -91,6 +89,24 @@
                 return;
             }
 
+            if (item.canExecuteSubscription != null)
+            {
+                item.canExecuteSubscription.Dispose();
+            }
+
+            var observableValue = e.NewValue as IObservable<bool>;
+            if (observableValue != null)
+            {
+                item.canExecuteSubscription =
+                    observableValue.Subscribe(newValue => ObservedCanExecuteValueChanged(item, newValue));
+            }
+
+            item.OnCanExecuteChanged();
+        }
+
+        private static void ObservedCanExecuteValueChanged(ReactiveCommand item, bool newValue)
+        {
+            item.lastObservedCanExecuteValue = newValue;
             item.OnCanExecuteChanged();
         }
 
@@ -103,6 +119,11 @@
             }
 
             item.OnCanExecuteChanged();
+        }
+
+        private static bool ValidateCanExecuteProperty(object value)
+        {
+            return value == null || value is bool || value is IObservable<bool>;
         }
     }
 }
