@@ -1,4 +1,13 @@
-﻿namespace ReactiveXAML
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ReactiveCommand.cs" company="Zühlke Engineering GmbH">
+//   Zühlke Engineering GmbH
+// </copyright>
+// <summary>
+//   An implementation of ICommand which binds directly to an Observer
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace ReactiveXAML
 {
     using System;
     using System.ComponentModel;
@@ -98,7 +107,7 @@
             if (observableValue != null)
             {
                 item.canExecuteSubscription =
-                    observableValue.Subscribe(newValue => ObservedCanExecuteValueChanged(item, newValue));
+                    observableValue.Subscribe(newValue => ObservedCanExecuteValueChanged(item, newValue), ex => Console.WriteLine("CanExecute onerror: {0}", ex));
             }
 
             item.OnCanExecuteChanged();

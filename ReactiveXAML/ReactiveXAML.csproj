@@ -63,10 +63,9 @@
     <Compile Include="ObservableBindingProxy.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SynchronizedCollection.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transformations\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

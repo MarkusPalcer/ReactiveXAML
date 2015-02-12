@@ -1,4 +1,13 @@
-﻿namespace ReactiveXAML.MarkupExtensions
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ObservableBindingExtension.cs" company="Zühlke Engineering GmbH">
+//   Zühlke Engineering GmbH
+// </copyright>
+// <summary>
+//   This markup extension creates a binding directly to an observable and/or observer
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace ReactiveXAML.MarkupExtensions
 {
     using System;
     using System.Windows;

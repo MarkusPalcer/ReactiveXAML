@@ -101,5 +101,40 @@
                     Command="{markupExtensions:ReactiveCommand TestSubject, CanExecuteBinding={Binding DataContext.ValidationResult, Source={StaticResource DataContextBridge}}}"
                     CommandParameter="{Binding ElementName=SampleText3, Path=Text}" />
         </StackPanel>
+        <GroupBox Header="SynchronizedCollection">
+            <GroupBox.DataContext>
+                <self:ListSampleViewModel />
+            </GroupBox.DataContext>
+            <StackPanel Orientation="Vertical">
+                <TextBox x:Name="NewItemBox"
+                         Text="{markupExtensions:ObservableBinding ValueChangeObserver, UpdateSourceTrigger=PropertyChanged}"/>
+                <ListBox ItemsSource="{Binding Items}"
+                         x:Name="CollectionList" 
+                         Width="200"
+                         SelectedIndex="{markupExtensions:ObservableBinding ListSelectionObserver, Mode=OneWayToSource}"
+                         SelectedItem="{Binding ElementName=NewItemBox, Path=Text, Mode=OneWayToSource}"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Add" 
+                            Command="{markupExtensions:ReactiveCommand AddValueObserver, CanExecutePath=ValidValueObservable}"
+                            CommandParameter="{Binding ElementName=NewItemBox, Path=Text}"/>
+                    <Button Content="Edit"
+                            Command="{markupExtensions:ReactiveCommand ChangeValueObserver, CanExecutePath=CanEditObservable}">
+                        <Button.CommandParameter>
+                            <MultiBinding>
+                                <MultiBinding.Converter>
+                                    <self:TupleConverter />
+                                </MultiBinding.Converter>
+
+                                <Binding ElementName="CollectionList" Path="SelectedIndex" />
+                                <Binding ElementName="NewItemBox" Path="Text" />
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Content="Remove"
+                            Command="{markupExtensions:ReactiveCommand RemoveValueObserver, CanExecutePath=CanDeleteObservable}"
+                            CommandParameter="{Binding ElementName=CollectionList, Path=SelectedIndex}"></Button>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
     </StackPanel>
 </Window>
