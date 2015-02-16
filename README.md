@@ -57,9 +57,12 @@ Conclusion
 * Proxy object for binding might cause performance/memory issues
 * View logic can be expressed in LINQ with the help of [RX]
 * "ViewModel" can use schedulers provided by [RX], ensuring thread safety
+* ReactiveXAML is not a replacement for Frameworks like [PRISM]  
+  It extends them to allow direct binding to observables and observers
 
 
 [ReactiveUI]: http://reactiveui.net/
 [RX]: https://msdn.microsoft.com/en-us/data/gg577609
 [cycle]: https://github.com/staltz/cycle
 [ReactJS]: http://facebook.github.io/react/
+[PRISM]: https://msdn.microsoft.com/en-us/library/ff648465.aspx
