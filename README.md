@@ -9,6 +9,8 @@ ReactiveXAML provides helper classes and markup extensions which enable these ki
 This repository is not meant to provide a fully functional framework, but to provide a space for experiments with the idea of moving the bridge between reactive and WPF from the ViewModel to the binding itself.
 Results from these experiments will be briefly documented here.
 
+ReactiveXAML has been started as educational project within [Zühlke Engineering GmbH](http://www.zuehlke.com/)
+
 Usage
 -----
 
